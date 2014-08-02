@@ -21,6 +21,19 @@ function PlayGround(tag) {
         this.pumpHouse = new metaContainer({ "parents": [], "nodeName": "Friday challenge #2" });
         this.mainSceneInit(width, height)
 
+        var login = new metaContainer({ "parents": [ this.pumpHouse ], "nodeName": "login" });
+
+        var pGeometry = this.pumpHouse.present.geometry
+
+        var loginWidth = pGeometry.width * 30 / 100
+
+        login.present.geometry = {
+            x: pGeometry.width / 2 - loginWidth / 2,
+            y: pGeometry.height / 2 - 150 - ((pGeometry.height / 2) * 35 / 100),
+            width: loginWidth,
+            height: 200
+        }
+
         /*
         new metaContainer({ "parents": [ this.pumpHouse ], "nodeName": "Player 1" });
         new metaContainer({ "parents": [ this.pumpHouse ], "nodeName": "Player 2" });

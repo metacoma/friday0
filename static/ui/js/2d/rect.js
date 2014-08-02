@@ -390,6 +390,29 @@ Object2dRect.prototype.draw = function(stage) {
         this._kObjects.group.add(this._kObjects.label);
         this._kObjects.layer.add(this._kObjects.group);
 
+        // XXX hack
+        if (this.sceneObject.nodeName == "login") {
+
+                   console.log("XXX " + this._kObjects.shape.y());
+                   var newText = new Kinetic.EditableText({
+                        // find click position.
+                        //x: e.pageX + getFullOffset().left + 5,
+                        //y: e.pageY + getFullOffset().top - 5,
+                        x: this._kObjects.shape.x(),
+                        y: this._kObjects.shape.y(),
+
+                        fontFamily: 'Courier',
+                        fill: '#000000',
+
+                        // pasteModal id to support ctrl+v paste.
+                        //pasteModal: "pasteModalArea"
+                    });
+
+                   this._kObjects.layer.add(newText);
+                   newText.focus();
+        }
+
+
         for (key in this._kObjects) {
             this._kObjects[key].setAttr("sceneObject", this.sceneObject);
         }
