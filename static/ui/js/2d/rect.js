@@ -49,7 +49,7 @@ Object2dRect.prototype.drawLabel = function() {
             fontSize: 18
         });
 
-        this.bodyOffsetY += r.height() + 30;
+        this.bodyOffsetY += r.height();
 
 
         return r;
@@ -73,6 +73,7 @@ Object2dRect.prototype.drawAbsolutePosition = function() {
 
     if (sceneParent != null) {
         var requestedSpace = sceneParent.present.requestSpace(x, y, width, height);
+        console.dir(requestedSpace)
         var offsetX = sceneParent.present._kObjects.shape.x() + requestedSpace.x
         var offsetY = sceneParent.present._kObjects.shape.y() + requestedSpace.y
 
@@ -164,12 +165,13 @@ Object2dRect.prototype.requestSpace = function(x, y, requestWidth, requestHight)
     } else {
         this.bodyOffsetX + requestWidth
     }
+    console.log("BODYOFFSETX " + (x + this.bodyOffsetX + this.props.get("marginLeft")))
 
     return {
         x: x + this.bodyOffsetX + this.props.get("marginLeft"),
         y: y + this.bodyOffsetY + this.props.get("marginTop"),
         width: requestWidth,
-        hight: requestHight
+        height: requestHight
     }
 }
 

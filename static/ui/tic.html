@@ -56,7 +56,6 @@
     });
 
     socket.on('action', function(msg) {
-        console.dir(msg['data']);
         msg['data'].forEach(function(i) {
 
             var dst = _scene.pumpHouse.path(i['dst'])
@@ -110,7 +109,6 @@
                     outObject.log(logLevel.DEBUG, 'destroy');
                     outObject.remove()
                     delete outObject
-                    //_scene.show()
                 }
             }
 
