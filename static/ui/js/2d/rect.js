@@ -425,6 +425,11 @@ Object2dRect.prototype.draw = function(stage) {
                     });
 
                    this._kObjects.editable.on("inputEnd", function(evt, inputData) {
+                        var sceneObject = evt.getAttr("sceneObject")
+                        var userInput = evt.tempText[0].partialText
+                        // XXX rewrite to metaOut
+                        sceneObject.out(userInput)
+
                    });
 
                    this._kObjects.layer.add(this._kObjects.username);
