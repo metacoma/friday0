@@ -393,8 +393,7 @@ Object2dRect.prototype.draw = function(stage) {
         // XXX hack
         if (this.sceneObject.nodeName == "login") {
 
-                   console.log("XXX " + this._kObjects.shape.y());
-                   var newText = new Kinetic.EditableText({
+                   this._kObjects.editable = new Kinetic.EditableText({
                         // find click position.
                         //x: e.pageX + getFullOffset().left + 5,
                         //y: e.pageY + getFullOffset().top - 5,
@@ -408,8 +407,13 @@ Object2dRect.prototype.draw = function(stage) {
                         //pasteModal: "pasteModalArea"
                     });
 
-                   this._kObjects.layer.add(newText);
-                   newText.focus();
+                   this._kObjects.editable.on("inputEnd", function(evt, inputData) {
+                   });
+
+                   this._kObjects.layer.add(this._kObjects.editable);
+                   this._kObjects.editable.focus();
+
+                   this._kObjects.editable.setAttr("sceneObject", this.sceneObject);
         }
 
 
@@ -427,4 +431,11 @@ Object2dRect.prototype.draw = function(stage) {
 
         this._kObjects.layer.setZIndex(this.sceneObject.deepLevel);
 
+}
+
+
+Object2dRect.prototype.destroy = function(stage) {
+    for (k in this._kObjects) {
+        this._kObjects[k].destroy
+    }
 }
