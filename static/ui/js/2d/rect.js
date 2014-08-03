@@ -26,16 +26,24 @@ function Object2dRect(sceneObj) {
 Object2dRect.prototype = new Object2d;
 
 
+Object2dRect.prototype.getLabel = function() {
+    if (this.props.isSet('textLabel')) {
+        return this.props.get('textLabel')
+    }
+    return this.sceneObject.nodeName
+}
+
 
 Object2dRect.prototype.drawLabel = function() {
 
         var absolutePosition = this.drawAbsolutePosition()
 
+        console.log(this.getLabel())
         var r = new Kinetic.Text({
-            x: absolutePosition.x - this.textLabel.length / 1.8,
+            x: absolutePosition.x - this.getLabel().length / 1.8,
             y: absolutePosition.y + 10,
             width: absolutePosition.width,
-            text: this.textLabel,
+            text: this.getLabel(),
             fill: "#000000",
             align: "center",
             fontFamily: 'Arial',
