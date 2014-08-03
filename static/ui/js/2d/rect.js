@@ -401,12 +401,21 @@ Object2dRect.prototype.draw = function(stage) {
         // XXX hack
         if (this.sceneObject.nodeName == "login") {
 
+            this._kObjects.username = new Kinetic.Text({
+                x: this._kObjects.shape.x() + 5,
+                y: this._kObjects.shape.y() + 70,
+                width: 110,
+                text: "username",
+                fill: "#000000",
+                align: "center",
+                fontFamily: 'Arial',
+                fontSize: 18
+            });
+
                    this._kObjects.editable = new Kinetic.EditableText({
-                        // find click position.
-                        //x: e.pageX + getFullOffset().left + 5,
-                        //y: e.pageY + getFullOffset().top - 5,
-                        x: this._kObjects.shape.x(),
-                        y: this._kObjects.shape.y(),
+
+                        x: this._kObjects.shape.x() + 5 + 120  ,
+                        y: this._kObjects.shape.y() + 70,
 
                         fontFamily: 'Courier',
                         fill: '#000000',
@@ -418,6 +427,7 @@ Object2dRect.prototype.draw = function(stage) {
                    this._kObjects.editable.on("inputEnd", function(evt, inputData) {
                    });
 
+                   this._kObjects.layer.add(this._kObjects.username);
                    this._kObjects.layer.add(this._kObjects.editable);
                    this._kObjects.editable.focus();
 
