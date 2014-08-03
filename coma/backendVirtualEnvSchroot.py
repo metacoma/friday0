@@ -38,7 +38,7 @@ class ComaBackendVirtualEnvSchroot(backendVirtualEnv.ComaBackendVirtualEnvBasic)
         if not user:
             user = "root"
 
-        path = self.prefix() + path
+        path = self.prefix() + "/" + path
         command = self.__chrootEnvStr() + "su -l " + user + " sh -c \"" + env + " " + path + "\""
         print command
         data = subprocess.check_output(command, shell=True)

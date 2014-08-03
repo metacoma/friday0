@@ -38,7 +38,6 @@ Object2dRect.prototype.drawLabel = function() {
 
         var absolutePosition = this.drawAbsolutePosition()
 
-        console.log(this.getLabel())
         var r = new Kinetic.Text({
             x: absolutePosition.x - this.getLabel().length / 1.8,
             y: absolutePosition.y + 10,
@@ -211,6 +210,15 @@ Object2dRect.prototype.group = function() {
              'listening': true,
              'dragOnTop': false
         })
+
+        if (this.props.isSet("draggable") == false) {
+            r.on("mousedown", function(evt) {
+                var sceneObject = this.getAttr("sceneObject")
+                if ("mousedown" in sceneObject.inEvents) {
+                    sceneObject.out(sceneObject.nodeName);
+                }
+            })
+        }
 
 
         if (this.props.isSet("draggable")) {

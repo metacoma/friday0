@@ -36,11 +36,15 @@
         });
     }
 
-    function file_run(filepath) {
+    function run_file(filepath) {
+        /*
         socket.emit("run", {
-            "dst": filepath,
-            "user": $.cookie('my name')
+            "dst": "/3x3",
+            "user": "bebebeko"
+            //"dst": filepath,
+            //"user": $.cookie('my name')
         });
+        */
     }
 
     var socket = io.connect('http://' + document.domain + ':' + location.port + '/coma');
@@ -56,13 +60,17 @@
     });
 
     socket.on('action', function(msg) {
+        console.dir(msg['data']);
         msg['data'].forEach(function(i) {
-            console.dir(i);
 
             var dst = _scene.pumpHouse.path(i['dst'])
             if (dst == null) {
                 console.log("action lookup dst failed dst = " + i['dst']);
                 return
+            }
+            if (i['type'] == 'cleanup') {
+                dst.log(logLevel.DEBUG, "cleanup from server");
+                dst.removeChilds()
             }
 
             if (i['type'] == 'in') {
@@ -89,6 +97,12 @@
                             socket.emit(out.dst, { "data": eval(out.data)})
                     }
                 }
+                if ('in' in i && 'events' in i['in']) {
+                    i['in']['events'].forEach(function(i) {
+                        newIn.inEvents[i] = 1
+                    });
+                }
+
                 newIn.present.props.assign('textLabel', i['data']['title'])
             }
             if (i['type'] == "out") {
@@ -120,7 +134,6 @@
 
                 }
 
-                //XXX refact
 
             }
            _scene.show()

@@ -47,7 +47,7 @@ def coma_cd(data):
     roomName = data['dst']
     roomUser = data['user']
     print roomUser + " cd " + roomName
-    join_room(roomName);
+    #join_room(roomName);
 
     emit("action", {
         "data": [
@@ -67,6 +67,22 @@ def coma_cd(data):
         "data": backend.readDir(roomUser, roomName)
     })
 
+@socketio.on('run', namespace='/coma')
+def coma_run(data):
+    print "XXX"
+    #runFile = data['dst']
+    #user = data['user']
+
+    #pprint(data)
+
+    #emit("action", {
+        #"data": [ { "dst": "/", "type": "cleanup" }, backend.virtualEnv.read(runFile, "", user) ]
+    #    "data": [ { "dst": "/", "type": "cleanup" } ]
+    #});
+
+    #emit("action", {
+    #    "data": [ backend.virtualEnv.read(runFile, "", user) ]
+    #});
 
 
 
