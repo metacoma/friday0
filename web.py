@@ -69,20 +69,26 @@ def coma_cd(data):
 
 @socketio.on('run', namespace='/coma')
 def coma_run(data):
-    print "XXX"
-    #runFile = data['dst']
-    #user = data['user']
+    runFile = data['dst']
+    user = data['user']
 
-    #pprint(data)
 
-    #emit("action", {
-        #"data": [ { "dst": "/", "type": "cleanup" }, backend.virtualEnv.read(runFile, "", user) ]
-    #    "data": [ { "dst": "/", "type": "cleanup" } ]
-    #});
+    emit("action", {
+        "data": [
+            { "dst": "/", "type": "change", "data": { "title" : runFile } },
+            { "dst": "/", "type": "cleanup" },
+        ]
 
-    #emit("action", {
-    #    "data": [ backend.virtualEnv.read(runFile, "", user) ]
-    #});
+    });
+
+
+    emit("action", {
+        "data": [
+            backend.virtualEnv.read(runFile, "", user)
+        ]
+    });
+
+
 
 
 

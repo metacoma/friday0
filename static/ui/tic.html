@@ -37,14 +37,10 @@
     }
 
     function run_file(filepath) {
-        /*
         socket.emit("run", {
-            "dst": "/3x3",
-            "user": "bebebeko"
-            //"dst": filepath,
-            //"user": $.cookie('my name')
+            "dst": filepath,
+            "user": $.cookie('my name')
         });
-        */
     }
 
     var socket = io.connect('http://' + document.domain + ':' + location.port + '/coma');
@@ -70,7 +66,7 @@
             }
             if (i['type'] == 'cleanup') {
                 dst.log(logLevel.DEBUG, "cleanup from server");
-                dst.removeChilds()
+                dst.cleanup()
             }
 
             if (i['type'] == 'in') {
@@ -94,7 +90,9 @@
                     out = i['out'][0]
                     newIn.metaOut = function(source, inputData) {
                             eval(out.action)
-                            socket.emit(out.dst, { "data": eval(out.data)})
+                            if (out.dst) {
+                                socket.emit(out.dst, { "data": eval(out.data)})
+                            }
                     }
                 }
                 if ('in' in i && 'events' in i['in']) {
@@ -117,7 +115,7 @@
             }
 
             if (i['type'] == "change") {
-                var changedObject = dst.path(i['name'])
+                var changedObject = dst.path(i['dst'])
                 console.log("CHANGE");
                 if (changedObject) {
 

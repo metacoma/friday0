@@ -153,6 +153,10 @@ Object2dRect.prototype.scale = function(x, y) {
 
 }
 
+Object2dRect.prototype.cleanup = function() {
+    this.bodyOffsetY = this.bodyOffsetX = 0
+}
+
 Object2dRect.prototype.requestSpace = function(x, y, requestWidth, requestHight) {
     if (this.bodyOffsetX + this.props.get("marginLeft") +  requestWidth > this.coord.width) {
         this.bodyOffsetY += 70
