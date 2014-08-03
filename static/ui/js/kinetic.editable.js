@@ -503,12 +503,14 @@ function init(KineticModule){
                         case 13:
                             if (that.unfocusOnEnter) that.unfocus(e);
                             else {
-                                if (that.ctrlDown) {
+                                if (!that.ctrlDown) {
                                     that.unfocus(e);
 
                                     that.ctrlDown = false;
 
                                     focusedText = undefined
+                                    console.log(that.tempText[0].partialText)
+                                    that.fire("inputEnd", that);
 
                                 } else that.newLine()
                             }

@@ -13,9 +13,11 @@ class comaBackendRuntimeError(BaseException):
 
 class ComaBackendUserUnix(backendUser.backendUserBasic):
     runCmd = None
+    prefix = None
 
     def backendInit(self):
         self.runCmd = self.config['runCmd']
+        self.prefix = self.config['prefix']
 
     def __check_username__(self, username):
         if not username:
@@ -23,7 +25,7 @@ class ComaBackendUserUnix(backendUser.backendUserBasic):
 
     def new(self, username):
         self.__check_username__(username)
-        proc = self.runCmd("useradd -md /var/tmp/" + username + " " + username, [ 0 ])
+        proc = self.runCmd("useradd -md " + self.prefix + "/home/" + username + " " + username, [ 0 ])
 
     def remove(self, username):
         self.__check_username__(username)

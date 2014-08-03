@@ -22,26 +22,113 @@
 </head>
 
 <script>
-    var socket = io.connect('http://' + document.domain + ':' + location.port + '/coma');
-    socket.on('hello, whats your name?', function(msg) {
-            socket.emit('hello, my name is', { "data": $.cookie('my name')})
-    });
-
-
-    socket.on('looks like you forget your name, enter again please', function(msg) {
-            $.cookie('my name', 'Petr')
-            socket.emit('hello, my name is', {"data": $.cookie('my name')})
-    });
-
-    socket.on('welcome back', function(msg) {
-            console.log("auth");
-    });
 
     _scene = null
     function init() {
 	_scene = new PlayGround('pumpHouseScene');
 	_scene.show()
     }
+
+    function cd_dir(dir) {
+        socket.emit("cd", {
+            "dst": dir,
+            "user": $.cookie('my name')
+        });
+    }
+
+    function file_run(filepath) {
+        socket.emit("run", {
+            "dst": filepath,
+            "user": $.cookie('my name')
+        });
+    }
+
+    var socket = io.connect('http://' + document.domain + ':' + location.port + '/coma');
+
+    socket.emit('/login', { "data": $.cookie('my name')})
+
+    socket.on("pong", function(msg) {
+        console.log("pong from server");
+    });
+
+    socket.on('welcome back', function(msg) {
+            cd_dir("/home/" + $.cookie('my name'));
+    });
+
+    socket.on('action', function(msg) {
+        msg['data'].forEach(function(i) {
+            console.dir(i);
+
+            var dst = _scene.pumpHouse.path(i['dst'])
+            if (dst == null) {
+                console.log("action lookup dst failed dst = " + i['dst']);
+                return
+            }
+
+            if (i['type'] == 'in') {
+
+                var newIn = new metaContainer({ "parents": [ dst ], "nodeName": i['name'] });
+
+                for (presetName in i['data']['present']) {
+                    newIn.present.props.assign(presetName, eval(i['data']['present'][presetName]))
+                    newIn.log(logLevel.DEBUG, 'present from server ' + presetName + ' = ' + eval(i['data']['present'][presetName]));
+                }
+
+
+                newIn.present.geometry = {
+                    x: newIn.present.props.get('x'),
+                    y: newIn.present.props.get('y'),
+                    width: newIn.present.props.get('width'),
+                    height: newIn.present.props.get('height')
+                }
+
+                if ('out' in i && i['out'].length) {
+                    out = i['out'][0]
+                    newIn.metaOut = function(source, inputData) {
+                            eval(out.action)
+                            socket.emit(out.dst, { "data": eval(out.data)})
+                    }
+                }
+                newIn.present.props.assign('textLabel', i['data']['title'])
+            }
+            if (i['type'] == "out") {
+                var outObject = dst.path(i['name'])
+                console.log("DESTROY");
+                if (outObject) {
+                    outObject.log(logLevel.DEBUG, 'destroy');
+                    outObject.remove()
+                    delete outObject
+                    //_scene.show()
+                }
+            }
+
+            if (i['type'] == "change") {
+                var changedObject = dst.path(i['name'])
+                console.log("CHANGE");
+                if (changedObject) {
+
+                    for (propName in i['data']) {
+                        propValue = i['data'][propName]
+
+                        if (propName == 'title') {
+                            changedObject.present.props.assign('textLabel', propValue);
+                        }
+
+                        changedObject.props.assign(propName, propValue)
+                        changedObject.log(logLevel.DEBUG, 'changed prop from server ' + propName + ' = ' + propValue);
+                    }
+
+                }
+
+                //XXX refact
+
+            }
+           _scene.show()
+
+
+        })
+    });
+
 
 </script>
 
