@@ -49,7 +49,7 @@ Object2dRect.prototype.drawLabel = function() {
             fontSize: 18
         });
 
-        this.bodyOffsetY += r.height();
+        this.bodyOffsetY += r.height() + 15;
 
 
         return r;
@@ -73,9 +73,10 @@ Object2dRect.prototype.drawAbsolutePosition = function() {
 
     if (sceneParent != null) {
         var requestedSpace = sceneParent.present.requestSpace(x, y, width, height);
-        console.dir(requestedSpace)
+        //console.dir(requestedSpace)
         var offsetX = sceneParent.present._kObjects.shape.x() + requestedSpace.x
         var offsetY = sceneParent.present._kObjects.shape.y() + requestedSpace.y
+
 
         x = offsetX
         y = offsetY
@@ -342,6 +343,7 @@ Object2dRect.prototype.shape = function() {
         var autoAlign = (this.geometry.x == null && this.geometry.y == null) ? true : false;
 
         var absolutePosition = this.drawAbsolutePosition();
+        //console.dir(absolutePosition);
 
         var r = new Kinetic.Rect({
             x: absolutePosition.x,

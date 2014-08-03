@@ -45,14 +45,14 @@ function Scene2d(scene, tag) {
     }
 
     this.dragLayer = function() {
-        console.log("dragLayer");
         return _dragLayer
     }
 
     this.show = function() {
-        stage.add(_dragLayer);
+        console.log("XXX DRAW")
+        //stage.add(_dragLayer);
         sceneContainer.show(this, stage)
-	this.feach(fixZIndex, 0);
+	//this.feach(fixZIndex, 0);
         stage.draw();
     }
 

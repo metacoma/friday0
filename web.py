@@ -83,9 +83,8 @@ def coma_run(data):
 
 
     emit("action", {
-        "data": [
+        "data":
             backend.virtualEnv.read(runFile, "", user)
-        ]
     });
 
 
@@ -113,8 +112,10 @@ def coma_clientHandshake(name):
         });
 
     except KeyError:
-        emit("action", {'data': \
-            [ backend.virtualEnv.read("/login", flaskEnv2ShellEnv(), None) ]
+        emit("action", {'data': [
+            #{ "dst": "/", "type": "cleanup" },
+            backend.virtualEnv.read("/login", flaskEnv2ShellEnv(), None)
+           ]
         });
 
 
