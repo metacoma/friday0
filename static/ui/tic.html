@@ -22,6 +22,32 @@
 </head>
 
 <script>
+    function game_hack() {
+        var f = {}
+        for(var i = 1; i <= 9; i++) { f[i] = _scene.pumpHouse.path('/gameSpace/' + i.toString()).props.get('tic') } ;
+
+        if ( (f[1] == f[2] && f[2] == f[3] && f[1] != null)
+            || (f[1] == f[4] && f[4] == f[7] && f[1] != null)
+            || (f[1] == f[5] && f[5] == f[9] && f[1] != null)
+            || (f[4] == f[5] && f[5] == f[6] && f[4] != null)
+            || (f[7] == f[8] && f[8] == f[9] && f[7] != null)
+            || (f[7] == f[5] && f[5] == f[3] && f[7] != null)) {
+                var root =  _scene.pumpHouse.path('/')
+                var gameend = new metaContainer({ "parents": [ root ], "nodeName": "Game end"});
+
+                gameend.present.geometry = {
+                    x: root.present.geometry.width / 2 - 60,
+                    y: 10,
+                    width: 120,
+                    height: 60
+                }
+
+                gameend.show(root.present.scene, root.present.stage);
+                root.props.set("gameEnd");
+        }
+
+
+    }
 
     _scene = null
     function init() {

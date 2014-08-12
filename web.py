@@ -113,7 +113,7 @@ def coma_clientHandshake(name):
 
     except KeyError:
         emit("action", {'data': [
-            #{ "dst": "/", "type": "cleanup" },
+            { "dst": "/", "type": "cleanup" },
             backend.virtualEnv.read("/login", flaskEnv2ShellEnv(), None)
            ]
         });

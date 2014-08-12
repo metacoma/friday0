@@ -27,3 +27,6 @@ class ComaBackendBasic():
 
     def readDir(self, username, path):
         return self.virtualEnv.read("/read " + self.virtualEnv.prefix() + path, "", username)
+
+    #def execute(self, username, path):
+

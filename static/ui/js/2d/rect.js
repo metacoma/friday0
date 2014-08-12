@@ -98,8 +98,25 @@ Object2dRect.prototype.reDraw = function() {
     return this._kObjects.layer.draw()
 }
 
+Object2dRect.prototype.toDown = function() {
+    if (('layerTop' in this._kObjects)) {
+        this.scene.dragLayer().remove(this._kObjects.layerTop)
+     //   console.log("DESTROY LAYER DRAG");
+    }
+}
+
 Object2dRect.prototype.toTop = function() {
-    return this._kObjects.layer.moveToTop()
+    //return this._kObjects.layer.moveToTop()
+    if (!('layerTop' in this._kObjects)) {
+        /*
+        this._kObjects.layerTop = new Kinetic.Layer()
+        this._kObjects.layerTop.add(this._kObjects.group);
+        this.stage.add(this._kObjects.layerTop)
+        */
+        this.scene.dragLayer().add(this._kObjects.group);
+        //console.log("CREATE LAYER DRAG");
+
+    }
 }
 
 Object2dRect.prototype.shadow = function(trigger) {
@@ -166,7 +183,7 @@ Object2dRect.prototype.requestSpace = function(x, y, requestWidth, requestHight)
     } else {
         this.bodyOffsetX + requestWidth
     }
-    console.log("BODYOFFSETX " + (x + this.bodyOffsetX + this.props.get("marginLeft")))
+    //console.log("BODYOFFSETX " + (x + this.bodyOffsetX + this.props.get("marginLeft")))
 
     return {
         x: x + this.bodyOffsetX + this.props.get("marginLeft"),
@@ -208,7 +225,16 @@ Object2dRect.prototype.down = function() {
     this.props.unset("up");
     this.tweenScale(1, 1)
     this.shadow(false);
+    this.toDown();
     this.updateLayer()
+}
+
+Object2dRect.prototype.draggableOff = function() {
+    this.props.unset("draggable");
+    for (i in this._kObjects) {
+        //console.log("DISABLE DRAGGABLE FOR " + i);
+        this._kObjects[i].setDraggable(false);
+    }
 }
 
 Object2dRect.prototype.group = function() {
@@ -234,14 +260,6 @@ Object2dRect.prototype.group = function() {
                 var sceneObject = this.getAttr("sceneObject")
                 var present = sceneObject.present
                 sceneObject.log(logLevel.DEBUG, "mousedown");
-
-                /*
-                if (!present.props.isSet("up")) {
-                    present.up();
-                } else {
-                    present.down();
-                }
-                */
 
                 if (present.tween) {
                     //present.tween.pause();
@@ -304,9 +322,23 @@ Object2dRect.prototype.group = function() {
 
 		if (endDrag != null) {
 	            /* we have new parent! */
+
+                    var prev = dragNode.parent
+
 		    dragNode.parent = endDrag
+
 		    dragNode.present.dragStartPosition.x = evt.dragEndNode.x()
 		    dragNode.present.dragStartPosition.y = evt.dragEndNode.y()
+
+                    if (dragNode.inEvents['newparent'] && (prev && prev != endDrag)) {
+                        dragNode.log(logLevel.DEBUG, "new parent action");
+                        sceneObject.out(endDrag);
+                    }
+
+                    if (endDrag.inEvents['newchild']) {
+                        endDrag.out(sceneObject);
+                    }
+
                     present.down();
 		} else {
                     sceneObject.log(logLevel.DEBUG, "bad parent container, going back");
@@ -353,8 +385,6 @@ Object2dRect.prototype.shape = function() {
             fill: '#AABBCC',
             stroke: '#000000',
             strokeWidth: 3,
-//			scaleX: 0,
-//			scaleY: 0
         });
 
         if (this.sceneObject.parent && autoAlign) {
@@ -466,7 +496,7 @@ Object2dRect.prototype.draw = function(stage) {
 	this.updateLayer()
         this.stage = stage
 
-        this.sceneObject.log(logLevel.DEBUG, "draw at " + this._kObjects.shape.x() + ":" + this._kObjects.shape.y()  + " width: " + this._kObjects.shape.width() + " height: " + this._kObjects.shape.height() );
+        this.sceneObject.log(logLevel.DEBUG, "draw at " + this._kObjects.shape.x() + ":" + this._kObjects.shape.y()  + " width: " + this._kObjects.shape.width() + " height: " + this._kObjects.shape.height() + " deepLevel " + this.sceneObject.deepLevel );
 
         this._kObjects.layer.setZIndex(this.sceneObject.deepLevel);
 
